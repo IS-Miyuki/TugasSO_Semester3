@@ -23,7 +23,7 @@ let init = (allo,maxim,avaliable) => {
     if (allo.length > ava_len){
 
     }
-    if ()
+    
     obj.maximum.push(maxim);
     obj.avaliable.push(avaliable);
 
