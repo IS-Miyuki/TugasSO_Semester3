@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 // let body = document.querySelector('body');
 function split_arr(allocation, maximum, available) {
     let available_len = available.split(" ").map(Number).length;
@@ -45,4 +43,3 @@ console.table(result_dict3);
 
 
 export default split_arr;
->>>>>>> Stashed changes
