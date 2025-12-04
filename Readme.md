@@ -19,4 +19,7 @@ Inisialisasi Data:
 4. Membuat Tabel Need.
 5. Membuat Tabel Available.
 
+Algoritma:
+
+
 
