@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabel Allo Horizontal</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 20px auto;
+            font-family: monospace; /* Agar mirip tampilan ASCII */
+            font-size: 16px;
+        }
+        th, td {
+            border: 2px solid #333; /* Garis tebal */
+            padding: 10px;
+            text-align: center;
+        }
+        th.header-allo {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+    <table id="myTable">
+        <thead>
+            <tr>
+                <th style="border: none;"></th> 
+                
+                <th id="headerAllo" class="header-allo">allo</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            </tbody>
+    </table>
+
+    <script>
+        // Data Array (misal ada 3 data)
+        // Panjang array ini menentukan jumlah kolom A, B, C
+        const allo = [0, 1, 2]; 
+
+        // 1. Update colspan header agar sesuai jumlah data
+        document.getElementById('headerAllo').colSpan = allo.length;
+
+        // 2. Buat baris data (Row P1)
+        const tbody = document.getElementById('tableBody');
+        let rowHtml = `<tr>`;
+        
+        // Kolom Master (P1)
+        rowHtml += `<td><strong>P1</strong></td>`;
+
+        // Loop untuk membuat kolom A, B, C ke samping
+        allo.forEach((_, index) => {
+            // Mengubah index 0->A, 1->B, 2->C
+            // Gunakan 65 untuk huruf Besar (A), gunakan 97 untuk huruf kecil (a)
+            const hurufr = String.fromCharCode(65 + index); 
+            
+            rowHtml += `<td>${hurufr}</td>`;
+        });
+
+        rowHtml += `</tr>`;
+
+        // Render ke HTML
+        tbody.innerHTML = rowHtml;
+    </script>
+
+</body>
+</html>

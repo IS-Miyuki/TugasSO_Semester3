@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Saya anak pak Mahas</title>
 </head>
+
 <body>
     <header>
         <h1>
@@ -14,12 +16,32 @@
     </header>
     <hr>
     <div class="main-container">
+        <div class="input-section">
+            <h3>Type your data, for separator you can use space or tab</h3>
+            <textarea id="bulk-input" rows="5" placeholder="Paste your data here..."></textarea>
 
+            <div class="or-divider">OR</div>
+
+            <div class="controls">
+                <label>
+                    Number of Processes: <input type="number" id="process-count" value="3" min="1">
+                </label>
+                <label>
+                    Number of Resources: <input type="number" id="resource-count" value="3" min="1">
+                </label>
+                <button id="generate-btn">Generate</button>
+            </div>
+        </div>
+
+        <div id="table-container"></div>
+        <div id="result-container"></div>
     </div>
     <footer>
         <p>&copy; 2025 Saya anak pak Mahas</p>
     </footer>
+
+    <script type="module" src="main.js"></script>
     
-    <script src="main.js"></script>
 </body>
+
 </html>
