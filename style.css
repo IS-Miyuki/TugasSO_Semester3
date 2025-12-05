@@ -143,3 +143,47 @@ input.cell-input {
     background-color: #4CAF50;
     color: white;
 }
+
+/* --- ALGORITHM SPECIFIC STYLES (Added for functionality) --- */
+
+.algo-controls {
+    margin-top: 20px;
+    text-align: center;
+    padding: 15px;
+    border-top: 1px solid #eee;
+}
+
+.algo-controls button {
+    margin: 0 5px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+}
+
+.algo-controls button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Green row when a process is safe */
+tr.process-safe {
+    background-color: #d4edda !important;
+    transition: background-color 0.5s;
+}
+
+/* Red row when deadlock occurs */
+tr.process-deadlock {
+    background-color: #f8d7da !important;
+}
+
+.log-box {
+    margin-top: 20px;
+    text-align: left;
+    background: #fafafa;
+    padding: 10px;
+    border: 1px solid #ddd;
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: monospace;
+    border-radius: 4px;
+}
