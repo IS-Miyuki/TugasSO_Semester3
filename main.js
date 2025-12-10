@@ -48,7 +48,7 @@ function handleGenerateTable() {
             // Use Math.ceil so if total % 3 != 0, we stretch the column count to fit.
             // The remaining slots will be filled with 0s by normalizeArray later.
             const totalCols = cleanData[0].length;
-            rInput.value = Math.ceil(totalCols / 3);
+            rInput.value = Math.ceil(totalCols / 4);
             
             preFillData = cleanData;
         }
@@ -67,15 +67,16 @@ function generateHTMLTable(rowCount, colCount, preFillData = null) {
     html += `
     <thead>
         <tr>
-            <th rowspan="2" class="header-cell">Process</th>
+            <th rowspan="3" class="header-cell">Process</th>
             <th colspan="${colCount}" class="header-cell">Allocation</th>
             <th colspan="${colCount}" class="header-cell">Maximum</th>
             <th colspan="${colCount}" class="header-cell">Available</th>
+            <th colspan="${colCount}" class="header-cell">Need</th>
         </tr>
         <tr>`;
-    
+
     // Generate A, B, C... headers
-    for(let k=0; k<3; k++) {
+    for(let k=0; k<4; k++) {
         for(let j=0; j<colCount; j++) {
             html += `<th class="header-cell">${String.fromCharCode(65 + j)}</th>`;
         }
@@ -119,6 +120,11 @@ function generateHTMLTable(rowCount, colCount, preFillData = null) {
                 html += `<td class="work-display" data-row="${i}" data-col="${j}"></td>`;
             }
         }
+
+        // 4. Need Display (will be calculated on simulation start)
+        for (let j = 0; j < colCount; j++) {
+            html += `<td class="need-display" data-row="${i}" data-col="${j}">0</td>`;
+        }
         html += '</tr>';
     }
     html += '</tbody></table>';
@@ -147,6 +153,7 @@ function generateHTMLTable(rowCount, colCount, preFillData = null) {
 // ==========================================
 
 function startSimulation() {
+    const logBox = document.getElementById('log-container');
     let pCount = parseInt(document.getElementById('process-count').value);
     let rCount = parseInt(document.getElementById('resource-count').value);
 
@@ -203,6 +210,22 @@ function startSimulation() {
             rowNeed.push(memory.max[i][j] - memory.alloc[i][j]);
         }
         memory.need.push(rowNeed);
+    }
+
+    // Display Need calculation in log
+    logBox.innerHTML += `<div class="log-item" style="border-bottom:1px solid #eee; padding:5px 0;">
+        <span style="color:blue; font-weight:bold;">Need Calculation:</span><br>
+        Need[i][j] = Maximum[i][j] - Allocation[i][j]
+    </div>`;
+
+    // Update Need display in UI
+    for(let i=0; i<pCount; i++) {
+        for(let j=0; j<rCount; j++) {
+            let needCell = document.querySelector(`.need-display[data-row="${i}"][data-col="${j}"]`);
+            if(needCell) {
+                needCell.innerText = memory.need[i][j];
+            }
+        }
     }
 
     // UI Updates
