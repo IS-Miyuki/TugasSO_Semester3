@@ -40,13 +40,8 @@ function handleGenerateTable() {
     if (rawText.trim() !== '') {
         let cleanData = getCleanDataFromText(rawText);
         if (cleanData.length > 0) {
-            // Update input fields based on pasted data
             pInput.value = cleanData.length;
             
-            // Dynamic Column Calculation:
-            // We want to distribute inputs into Alloc, Max, Avail (3 groups).
-            // Use Math.ceil so if total % 3 != 0, we stretch the column count to fit.
-            // The remaining slots will be filled with 0s by normalizeArray later.
             const totalCols = cleanData[0].length;
             rInput.value = Math.ceil(totalCols / 4);
             
@@ -62,8 +57,7 @@ function handleGenerateTable() {
 
 function generateHTMLTable(rowCount, colCount, preFillData = null) {
     let html = '<table id="bankerTable">';
-    
-    // --- HEADER ---
+
     html += `
     <thead>
         <tr>
@@ -98,30 +92,25 @@ function generateHTMLTable(rowCount, colCount, preFillData = null) {
         let maxData   = rowData ? normalizeArray(rowData.slice(colCount, colCount*2), colCount) : [];
         let availData = rowData ? normalizeArray(rowData.slice(colCount*2, colCount*3), colCount) : [];
 
-        // 1. Allocation Inputs
         for (let j = 0; j < colCount; j++) {
             let val = rowData ? allocData[j] : 0;
             html += `<td><input type="number" class="cell-input input-allocation" data-row="${i}" data-col="${j}" value="${val}"></td>`;
         }
 
-        // 2. Maximum Inputs
         for (let j = 0; j < colCount; j++) {
             let val = rowData ? maxData[j] : 0;
             html += `<td><input type="number" class="cell-input input-maximum" data-row="${i}" data-col="${j}" value="${val}"></td>`;
         }
 
-        // 3. Available Inputs (Only Row 0 is editable)
         for (let j = 0; j < colCount; j++) {
             if (i === 0) {
                 let val = rowData ? availData[j] : 0;
-                // Added data-initial attribute logic in startSimulation to handle resets
                 html += `<td><input type="number" class="cell-input input-available" data-col="${j}" value="${val}"></td>`;
             } else {
                 html += `<td class="work-display" data-row="${i}" data-col="${j}"></td>`;
             }
         }
 
-        // 4. Need Display (will be calculated on simulation start)
         for (let j = 0; j < colCount; j++) {
             html += `<td class="need-display" data-row="${i}" data-col="${j}">0</td>`;
         }
@@ -148,16 +137,13 @@ function generateHTMLTable(rowCount, colCount, preFillData = null) {
     document.getElementById('btn-next').addEventListener('click', runNextStep);
 }
 
-// ==========================================
-// 4. ALGORITHM LOGIC
-// ==========================================
 
 function startSimulation() {
     const logBox = document.getElementById('log-container');
     let pCount = parseInt(document.getElementById('process-count').value);
     let rCount = parseInt(document.getElementById('resource-count').value);
 
-    // RESTORE INITIAL INPUTS (If they were changed by a previous run)
+    // kembaliin input kalau berubah
     const availInputs = document.querySelectorAll('.input-available');
     availInputs.forEach(input => {
         if (input.dataset.initial) {
@@ -197,13 +183,13 @@ function startSimulation() {
         memory.max.push(rowMax);
     }
 
-    // 2. Read Available
+    // available
     for(let j=0; j<rCount; j++) {
         let avaVal = document.querySelector(`.input-available[data-col="${j}"]`).value;
         memory.work.push(Number(avaVal));
     }
 
-    // 3. Calculate Need
+    // need
     for(let i=0; i<pCount; i++) {
         let rowNeed = [];
         for(let j=0; j<rCount; j++) {
@@ -247,10 +233,9 @@ function runNextStep() {
     let foundSafeProcess = false;
 
     for (let i = 0; i < memory.processes; i++) {
-        // Find a process that is NOT finished
         if (memory.finished[i] === false) {
 
-            // Check if Need <= Work
+            // cek amungkin ngga kalau available ambil proses ini
             let possible = true;
             for (let j = 0; j < memory.resources; j++) {
                 if (memory.need[i][j] > memory.work[j]) {
@@ -258,11 +243,11 @@ function runNextStep() {
                     break; 
                 }
             }
-
+// di sini buat cek apakah bisa ngga nya nanti 
             if (possible) {
                 foundSafeProcess = true;
 
-                // Execute Process: Work = Work + Allocation
+                // available = cur_available + allocation 
                 let oldWork = [...memory.work];
                 for (let j = 0; j < memory.resources; j++) {
                     memory.work[j] = memory.work[j] + memory.alloc[i][j];
@@ -291,11 +276,11 @@ function updateUI_Success(processIndex, oldWork, newWork) {
     
     // VISUAL UPDATE: Update Available columns to show change
     for(let j = 0; j < memory.resources; j++) {
-        // 1. Update the Input fields at the top (Row 0) to serve as a global counter
+        // Update the Input fields at the top (Row 0) to serve as a global counter
         let inputEl = document.querySelector(`.input-available[data-col="${j}"]`);
         if(inputEl) inputEl.value = newWork[j];
 
-        // 2. Update the "work-display" cells for the process that just finished (if not Row 0)
+        // Update the "work-display" cells for the process that just finished (if not Row 0)
         let displayCell = document.querySelector(`.work-display[data-row="${processIndex}"][data-col="${j}"]`);
         if(displayCell) {
             displayCell.innerText = newWork[j];
