@@ -3,7 +3,9 @@
 Bahasa : JavaScript
 1. Antonius Kiya Ananda Derron (71241119)
 2. Kevin Setiadi (71241078)
-3. 
+3. Natalie Nesia Jessica Soesanto (71241079)
+4. Fransiska (71241123)
+5. Michele Devina (71241068) 
 
 ## Materi / Materi Yang digunakan
 ### Banker's Algorithm
